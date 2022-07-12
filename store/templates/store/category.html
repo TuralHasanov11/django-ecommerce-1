@@ -1,0 +1,44 @@
+{% extends "app.html" %}
+{% load static %}
+{% block title %}
+{% if category %}{{ category.name }}{% else %}Products{% endif %}
+{% endblock %}
+{% block content %}
+
+<div class="album py-5 bg-light">
+  <div class="container">
+
+    <div class="pb-3 h5">{{category.name|title}}</div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
+
+      {% if not products %}
+      <div class="col-12">
+        <p>No products. <a href="{% url 'store:products '%}">Home</a></p> 
+      </div>
+      {% else %}
+      {% for product in products %}
+      <div class="col">
+        <div class="card shadow-sm">
+          {% for image in product.product_image.all %}
+          {% if image.is_feature %}
+          <img class="img-fluid" alt="Responsive image" src="{{ image.image.url }}"
+            alt="{{ image.image.alt_text }}">
+          {% endif %}
+          {% endfor %}
+          <div class="card-body">
+            <p class="card-text">
+              <a class="text-dark text-decoration-none" href="{{ product.get_absolute_url }}">{{ product.title|slice:":50" }}</a>
+            </p>
+            <div class="fw-bold">${{product.regular_price}}</div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

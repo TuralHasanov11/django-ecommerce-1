@@ -1,0 +1,13 @@
+{% extends "app.html" %}
+{% block title %}Order Completed{% endblock %}
+{% block content %}
+
+<div class="container-fluid">
+
+  <div class="p-4">
+    <h3 class="mb-4">Order has been placed</h3>
+    <a href="{% url "account:dashboard" %}">See orders</a>
+  </div>
+
+</div>
+{% endblock %}
