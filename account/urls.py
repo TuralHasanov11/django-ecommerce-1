@@ -3,12 +3,12 @@ from django.urls import path
 from django.views.generic import TemplateView
 
 from . import views
-from .forms import PasswordResetConfirmForm, PwdResetForm, UserLoginForm
+from .forms import PwdResetConfirmForm, PwdResetForm, UserLoginForm
 
 app_name = 'account'
 
 urlpatterns = [
-    path('login/', auth_views.LoginView.as_view(template_name='account/registration/login.html',
+    path('login/', auth_views.LoginView.as_view(template_name='account/auth/login.html',
                                                 form_class=UserLoginForm), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/account/login/'), name='logout'),
     path('register/', views.register, name='register'),
@@ -19,12 +19,12 @@ urlpatterns = [
                                                                  email_template_name='account/auth/password_reset_email.html',
                                                                  form_class=PwdResetForm), name='pwdreset'),
     path('password_reset_confirm/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name='account/auth/password_reset_confirm.html',
-                                                                                                success_url='/account/password_reset_complete/', 
-                                                                                                form_class=PasswordResetConfirmForm),
+                                                                                                success_url='password_reset_complete/',
+                                                                                                form_class=PwdResetConfirmForm),
          name="password_reset_confirm"),
     path('password_reset/password_reset_email_confirm/',
          TemplateView.as_view(template_name="account/auth/password_reset_status.html"), name='password_reset_done'),
-    path('password_reset_complete/',
+    path('password_reset_confirm/Mg/password_reset_complete/',
          TemplateView.as_view(template_name="account/auth/password_reset_status.html"), name='password_reset_complete'),
 
     path('dashboard/', views.dashboard, name='dashboard'),

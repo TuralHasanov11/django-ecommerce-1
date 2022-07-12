@@ -70,7 +70,7 @@ def register(request):
                 'token': account_activation_token.make_token(user),
             })
             user.email_user(subject=subject, message=message)
-            return render(request, "account/register/register_email_confirm")
+            return render(request, "account/auth/register_email_confirm.html")
     else:
         registerForm = RegistrationForm()
     return render(request, 'account/auth/register.html', {'form': registerForm})

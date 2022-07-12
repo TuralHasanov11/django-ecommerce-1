@@ -114,3 +114,32 @@ CART_SESSION_ID = 'cart'
 # Stripe Payment
 os.environ.setdefault('STRIPE_PUBLISHABLE_KEY', 'pk_test_51Kv2hzLv560bXuLqgEVfRRTSm7hapRXSEz499u5sdhHTIb0RKbByVbQSKVp34MTm3CTVGWd5st7xCtwXBW5CnKtY00Ulsr7K7c')
 STRIPE_SECRET_KEY = 'sk_test_51Kv2hzLv560bXuLqqPRoiDxhSgMLaoUc9FvavcbuoCNd5IXRfD5yqZ7U1EI8ApyiWd7yvpmdbbjYtWW7OoAs3F6F00LyB4rDmb'
+
+
+
+# DEV DEBUG
+# debug_toolbar settings
+if DEBUG:
+    INTERNAL_IPS = ("127.0.0.1",)
+    MIDDLEWARE += ("debug_toolbar.middleware.DebugToolbarMiddleware",)
+
+    INSTALLED_APPS += ("debug_toolbar",)
+
+    DEBUG_TOOLBAR_PANELS = [
+        "debug_toolbar.panels.versions.VersionsPanel",
+        "debug_toolbar.panels.timer.TimerPanel",
+        "debug_toolbar.panels.settings.SettingsPanel",
+        "debug_toolbar.panels.headers.HeadersPanel",
+        "debug_toolbar.panels.request.RequestPanel",
+        "debug_toolbar.panels.sql.SQLPanel",
+        "debug_toolbar.panels.staticfiles.StaticFilesPanel",
+        "debug_toolbar.panels.templates.TemplatesPanel",
+        "debug_toolbar.panels.cache.CachePanel",
+        "debug_toolbar.panels.signals.SignalsPanel",
+        "debug_toolbar.panels.logging.LoggingPanel",
+        "debug_toolbar.panels.redirects.RedirectsPanel",
+    ]
+
+    DEBUG_TOOLBAR_CONFIG = {
+        "INTERCEPT_REDIRECTS": False,
+    }

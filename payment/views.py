@@ -2,7 +2,7 @@ import json
 
 import stripe
 from django.contrib.auth.decorators import login_required
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import TemplateView
@@ -13,6 +13,7 @@ from cart.cart import Cart
 from orders.views import paymentConfirmation
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+endpoint_secret = 'whsec_28a2ee85649a3971e3a4e05c33c73e901487f9bcda58fe80323d86ecd7e00a68'
 
 def orderPlaced(request):
     cart = Cart(request)
@@ -41,16 +42,17 @@ def cartView(request):
 
 @csrf_exempt
 def stripeWebhook(request):
-    payload = request.body
+    data = request.body
     event = None
 
     try:
-        event = stripe.Event.construct_from(
-            json.loads(payload), stripe.api_key
+        event = stripe.Webhook.construct_event(
+            data, request.headers.get('stripe-signature'), endpoint_secret
         )
     except ValueError as e:
-        print(e)
-        return HttpResponse(status=400)
+        return JsonResponse(status_code=400, content=e)
+    except stripe.error.SignatureVerificationError as e:
+        return JsonResponse(status_code=400, content=e)
 
     if event.type == 'payment_intent.succeeded':
         paymentConfirmation(event.data.object.client_secret)

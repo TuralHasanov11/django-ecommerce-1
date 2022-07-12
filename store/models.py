@@ -18,7 +18,7 @@ class Category(models.Model):
 
 class ProductManager(models.Manager):
     def get_queryset(self):
-        return super(ProductManager, self).get_queryset().filter(is_active=True)
+        return super(ProductManager, self).get_queryset().filter(is_active=True, in_stock=True)
 
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='product', on_delete=models.CASCADE)

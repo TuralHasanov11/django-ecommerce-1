@@ -78,7 +78,7 @@ class PwdResetForm(PasswordResetForm):
         return email
 
 
-class PasswordResetConfirmForm(SetPasswordForm):
+class PwdResetConfirmForm(SetPasswordForm):
     new_password1 = forms.CharField(
         label='New password', widget=forms.PasswordInput(
             attrs={'class': 'form-control mb-3', 'placeholder': 'New Password', 'id': 'form-newpass'}))
