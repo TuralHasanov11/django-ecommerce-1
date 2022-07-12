@@ -1,14 +1,14 @@
 from decimal import Decimal
-
+from django.conf import settings
 from store.models import Product
 
 
 class Cart():
     def __init__(self, request):
         self.session = request.session
-        cart = self.session.get('session_key')
-        if 'session_key' not in request.session:
-            cart = self.session['session_key'] = {}
+        cart = self.session.get(settings.BASKET_SESSION_ID)
+        if settings.BASKET_SESSION_ID not in request.session:
+            cart = self.session[settings.BASKET_SESSION_ID] = {}
         self.cart = cart
 
     def add(self, product, quantity):
@@ -53,6 +53,10 @@ class Cart():
             del self.cart[productId]
             print(productId)
             self.save()
+
+    def clear(self):
+        del self.session[settings.BASKET_SESSION_ID]
+        self.save() 
 
     def save(self):
         self.session.modified = True

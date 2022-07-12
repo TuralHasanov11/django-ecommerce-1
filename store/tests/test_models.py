@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 
@@ -31,7 +31,7 @@ class TestCategoriesModel(TestCase):
 class TestProductsModel(TestCase):
     def setUp(self):
         Category.objects.create(name='django', slug='django')
-        User.objects.create(username='admin')
+        settings["AUTH_USER_MODEL"].objects.create(username='admin')
         self.data1 = Product.objects.create(
             category_id=1, 
             title='django beginners', 

@@ -7,7 +7,7 @@ SECRET_KEY = 'django-insecure-x+ko+inp_jg7ogdi6^*m68r+p9r47bqwn%t$k0(bs&u&_t+akh
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['yourdomain.com', '127.0.0.1']
+ALLOWED_HOSTS = ['yourdomain.com', '127.0.0.1', 'localhost']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -18,7 +18,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'store',
-    'cart'
+    'cart',
+    'account',
+    'payment',
+    'orders'
 ]
 
 MIDDLEWARE = [
@@ -97,3 +100,17 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Custom user model
+AUTH_USER_MODEL = 'account.Account'
+LOGIN_REDIRECT_URL = '/account/dashboard'
+LOGIN_URL = '/account/login/'
+
+# Email setting
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+CART_SESSION_ID = 'cart'
+
+# Stripe Payment
+os.environ.setdefault('STRIPE_PUBLISHABLE_KEY', 'pk_test_51Kv2hzLv560bXuLqgEVfRRTSm7hapRXSEz499u5sdhHTIb0RKbByVbQSKVp34MTm3CTVGWd5st7xCtwXBW5CnKtY00Ulsr7K7c')
+STRIPE_SECRET_KEY = 'sk_test_51Kv2hzLv560bXuLqqPRoiDxhSgMLaoUc9FvavcbuoCNd5IXRfD5yqZ7U1EI8ApyiWd7yvpmdbbjYtWW7OoAs3F6F00LyB4rDmb'

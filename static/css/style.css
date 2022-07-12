@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+html, body, p, div{
+    letter-spacing: -0.02px;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* CART */
+.cart-quantity{
+    color: #fff;
+    background: #d42114;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 11px;
+    height: 15px;
+    width: 14px;
+    position: absolute;
+    box-sizing: content-box;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 1px;
+    right: 10px;
+}
+
+.cart-btn{
+    position: relative;
+}
+
+.cart-btn:hover, .cart-btn:focus, .cart-btn:active, .cart-btn.active{
+    color:#d42114;
+    transition-duration: 0.4s;
+    background-color: #fff;
+}

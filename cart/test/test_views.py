@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 
@@ -7,7 +7,7 @@ from store.models import Category, Product
 
 class TestCartView(TestCase):
     def setUp(self):
-        User.objects.create(username='admin')
+        settings["AUTH_USER_MODEL"].objects.create(username='admin')
         Category.objects.create(name='django', slug='django')
         Product.objects.create(category_id=1, title='django beginners', created_by_id=1,
                                slug='django-beginners', price='20.00', image='django')
@@ -27,17 +27,17 @@ class TestCartView(TestCase):
     def test_cart_add(self):
         response = self.client.post(
             reverse('cart:cart_add'), {"product_id": 3, "product_quantity": 1}, xhr=True)
-        self.assertEqual(response.json(), {'qty': 4})
+        self.assertEqual(response.json(), {'quantity': 4})
         response = self.client.post(
             reverse('cart:cart_add'), {"product_id": 2, "product_quantity": 1}, xhr=True)
-        self.assertEqual(response.json(), {'qty': 3})
+        self.assertEqual(response.json(), {'quantity': 3})
 
     def test_cart_delete(self):
         response = self.client.post(
             reverse('cart:cart_delete'), {"product_id": 2}, xhr=True)
-        self.assertEqual(response.json(), {'qty': 1, 'subtotal': '20.00'})
+        self.assertEqual(response.json(), {'quantity': 1, 'subtotal': '20.00'})
 
     def test_cart_update(self):
         response = self.client.post(
             reverse('cart:cart_update'), {"product_id": 2, "product_quantity": 1}, xhr=True)
-        self.assertEqual(response.json(), {'qty': 2, 'subtotal': '40.00'})
+        self.assertEqual(response.json(), {'quantity': 2, 'subtotal': '40.00'})
