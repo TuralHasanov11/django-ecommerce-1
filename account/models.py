@@ -3,11 +3,11 @@ from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
 from django.core.mail import send_mail
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
+import uuid
 
 class AccountManager(BaseUserManager):
 
-    def create_superuser(self, email, username, password, **other_fields):
+    def create_superuser(self, email, name, password, **other_fields):
 
         other_fields.setdefault('is_staff', True)
         other_fields.setdefault('is_superuser', True)
@@ -20,15 +20,15 @@ class AccountManager(BaseUserManager):
             raise ValueError(
                 'Superuser must be assigned to is_superuser=True.')
 
-        return self.create_user(email, username, password, **other_fields)
+        return self.create_user(email, name, password, **other_fields)
 
-    def create_user(self, email, username, password, **other_fields):
+    def create_user(self, email, name, password, **other_fields):
 
         if not email:
             raise ValueError(_('You must provide an email address'))
 
         email = self.normalize_email(email)
-        user = self.model(email=email, username=username,
+        user = self.model(email=email, name=name,
                           **other_fields)
         user.set_password(password)
         user.save()
@@ -38,17 +38,8 @@ class AccountManager(BaseUserManager):
 class Account(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(_('email address'), unique=True)
-    username = models.CharField(max_length=191, unique=True)
-    first_name = models.CharField(max_length=191, blank=True)
-    about = models.TextField(_(
-        'about'), max_length=500, blank=True)
-    # Delivery details
+    name = models.CharField(max_length=191, unique=True)
     phone = models.CharField(max_length=15, blank=True)
-    postcode = models.CharField(max_length=12, blank=True)
-    address_line_1 = models.CharField(max_length=191, blank=True)
-    address_line_2 = models.CharField(max_length=191, blank=True)
-    town_city = models.CharField(max_length=191, blank=True)
-    # User Status
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -57,7 +48,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     objects = AccountManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ['name']
 
     class Meta:
         verbose_name = "Accounts"
@@ -73,4 +64,26 @@ class Account(AbstractBaseUser, PermissionsMixin):
         )
 
     def __str__(self):
-        return self.username
+        return self.name
+
+
+class Address(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    account = models.ForeignKey(Account, verbose_name=_("Account"), on_delete=models.CASCADE)
+    full_name = models.CharField(_("Full Name"), max_length=150)
+    phone = models.CharField(_("Phone Number"), max_length=50)
+    postcode = models.CharField(_("Postcode"), max_length=50)
+    address_line = models.CharField(_("Address Line 1"), max_length=255)
+    address_line2 = models.CharField(_("Address Line 2"), max_length=255)
+    town_city = models.CharField(_("Town/City/State"), max_length=150)
+    delivery_instructions = models.CharField(_("Delivery Instructions"), max_length=255)
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
+    default = models.BooleanField(_("Default"), default=False)
+
+    class Meta:
+        verbose_name = "Address"
+        verbose_name_plural = "Addresses"
+
+    def __str__(self):
+        return "Address"
