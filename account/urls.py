@@ -31,11 +31,12 @@ urlpatterns = [
     path('profile/edit/', views.edit, name='edit'),
     path('profile/delete/', views.delete, name='delete'),
     path('profile/delete_confirm/', TemplateView.as_view(template_name="account/user/delete_confirm.html"), name='delete_confirmation'),
-     path("addresses/", views.viewAddress, name="addresses"),
+    path("addresses/", views.viewAddress, name="addresses"),
     path("add_address/", views.addAddress, name="add_address"),
     path("addresses/edit/<slug:id>/", views.editAddress, name="edit_address"),
     path("addresses/delete/<slug:id>/", views.deleteAddress, name="delete_address"),
     path("addresses/set_default/<slug:id>/", views.setDefaultAddress, name="set_default_address"),
     path("wishlist", views.wishlist, name="wishlist"),
     path("wishlist/toggle/<int:id>", views.addToWishlist, name="toggle_wishlist"),
+    path("orders/", views.orders, name="orders"),
 ]

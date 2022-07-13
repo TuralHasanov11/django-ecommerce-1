@@ -9,6 +9,7 @@ from store.models import Product
 class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='order_user')
     full_name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=255, blank=True)
     address1 = models.CharField(max_length=250)
     address2 = models.CharField(max_length=250, null=True, blank=True)
     city = models.CharField(max_length=100)
